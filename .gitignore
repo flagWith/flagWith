@@ -35,3 +35,21 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Kotlin ###
+.kotlin/
+
+### macOS ###
+.DS_Store
+
+### Secrets / local config ###
+.env
+.env.*
+application-local.yaml
+application-local.yml
+application-secret*.yaml
+*.pem
+*.key
+
+### Claude Code (local only) ###
+.claude/settings.local.json

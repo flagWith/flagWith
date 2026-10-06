@@ -1,0 +1,23 @@
+# 로컬 개발용. 여기 값은 개발 전용이며 운영에서는 쓰지 않는다.
+services:
+  mysql:
+    image: mysql:8.4
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: flagwith
+      MYSQL_USER: flagwith
+      MYSQL_PASSWORD: flagwith
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Seoul
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_0900_ai_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  redis:
+    image: redis:7
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql-data:
