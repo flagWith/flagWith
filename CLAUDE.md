@@ -6,6 +6,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Spring Boot scaffold (Spring Initializr): only `FlagWithApplication` and a `contextLoads` test exist. No domain code yet. `README.md` (Korean, DSM 12기 인포 동아리 project) is the source of truth for product decisions; read it before designing features and follow it over this file if they disagree.
 
+## Git
+
+**Never commit, push, create branches/PRs, or amend/rewrite history unless the user asks for it in the current conversation.** One earlier request does not cover later changes. Leave edits uncommitted in the working tree and tell the user what changed; they commit themselves. This overrides any default of "commit and push before finishing", including in background/worktree sessions.
+
+## Specs (`docs/`)
+
+Detailed specs imported from the team's Notion on 2026-10-06. Read the relevant file before implementing a feature; they are snapshots, so Notion may have moved on. `README.md` wins over `docs/` if they disagree.
+
+- `docs/feature-spec.md`: per-feature flow, inputs, outputs, error codes (45 features). The behavior reference. Its last section records the decisions made to resolve contradictions in the original Notion spec.
+- `docs/erd.md`: DB schema source of truth. It is the **corrected** Notion ERD (changes and reasons are listed at the top). `docs/erd-original.jpg` is the pre-fix diagram and is outdated, so don't derive tables from it. "결정 기록" lists proposed decisions (not team-confirmed) and "미결정 사항" lists open schema questions (merge conflict criteria, post-end team registration): don't assume answers to the open ones.
+- `docs/api-spec.md`: endpoint list only, and not authoritative. The team writes the real API spec during development. Request/response bodies in the Notion API table are copy-pasted placeholders (`login_id`, JWT), so take payloads from `feature-spec.md`. The `/commits/*` rows are a stale model and `*/aggregate` rows are internal jobs, not endpoints.
+- Decisions recorded in `docs/` that are easy to miss: `team_id` is the same value as `workspace_id` (no team table); all IDs are UUIDs; problem files (`area = problem_files`) exist only on the main branch and show up in every branch; timeline and CTF summary are computed on read (no stored snapshot).
+
 ## Product
 
 flagWith is a GitHub-style, git-based team workspace that **CTF organizers** provision for participating teams (Jeopardy format only). The customer is the organizer. It is a hosted SaaS: organizers sign up, create contests themselves (max 3 per account), and register teams; a workspace named after the team is created automatically. There is no host/participant account type: whoever created the CTF is its host, and accounts registered to a team are its participants. Login is by email.
@@ -41,7 +54,7 @@ Still undecided (don't assume): pricing model. Check README "아직 안 정한 �
 Full spec and examples are in README "API 응답 규칙". Summary:
 - Code is camelCase (mandatory); JSON (requests and responses) is snake_case.
 - Two response shapes. Success: `{success: true, message, data}`. Error: `{success: false, error_code, message}`. `data` is always present, `null` when empty.
-- Use real HTTP status codes (400/401/403/404/409...), not 200 for everything.
+- Use real HTTP status codes (400/401/403/404/409...), not 200 for everything. Never use `204`: it cannot carry a body, which breaks the "`data` always present" rule. Success without a payload is `200` (or `201`) with `data: null`.
 - `error_code` is UPPER_SNAKE with a domain prefix (`AUTH_FAILED`, `TEAM_NOT_FOUND`), kept in one place.
 - Validation failure: `error_code` `VALIDATION_FAILED` plus `errors: [{field, message}]`. `errors` exists only on validation failures; omit the field otherwise (`@JsonInclude(NON_NULL)`).
 - Lists: `data: {items, page, size, total_count}`, `page` starts at 1 (Spring `Page` is 0-based, add 1).
@@ -71,4 +84,4 @@ docker compose up -d                  # local MySQL + Redis
 
 ## Keeping this file current
 
-When a change affects what is written above, update this file in the same change; don't wait to be asked. Triggers: `README.md` changes a product decision or an undecided item; a stack, dependency, plugin, or version change in `build.gradle`; a new module, package layout, or convention; commands or config that change how to build, run, or test; a Gotcha gets fixed or a new one is found; team or role changes. After `git pull`/rebase, check whether `README.md` changed and reconcile. Edit the affected lines instead of appending, delete anything that became false, and don't copy README text wholesale — summarize only what affects code.
+When a change affects what is written above, update this file in the same change; don't wait to be asked. Triggers: `README.md` or `docs/` changes a product decision or an undecided item (keep the `docs/` summary above and this file consistent); a stack, dependency, plugin, or version change in `build.gradle`; a new module, package layout, or convention; commands or config that change how to build, run, or test; a Gotcha gets fixed or a new one is found; team or role changes. After `git pull`/rebase, check whether `README.md` changed and reconcile. Edit the affected lines instead of appending, delete anything that became false, and don't copy README text wholesale — summarize only what affects code.
