@@ -40,9 +40,15 @@ Stack decided in README: React + TypeScript, Spring Boot, MySQL, Redis (session/
 
 Still undecided (don't assume): pricing model. Check README "아직 안 정한 것" for the current list.
 
+## Repo layout (monorepo)
+
+- `backend/`: Spring Boot app (Gradle project root: `build.gradle`, `settings.gradle`, `gradlew`, `src/`). Run Gradle commands from here.
+- `frontend/`: React + TypeScript app. Not initialized yet.
+- Root: shared `docs/`, `docker-compose.yml`, `README.md`, `CLAUDE.md`, `AGENTS.md`.
+
 ## Stack (this repo)
 
-- Spring Boot 4.0.x, Gradle (Groovy DSL), Java 17 toolchain. Base package: `com.flagwith.flagwith`. Config in `src/main/resources/application.yaml`.
+- Spring Boot 4.0.x, Gradle (Groovy DSL), Java 17 toolchain. Base package: `com.flagwith.flagwith`. Config in `backend/src/main/resources/application.yaml`.
 - Spring Web MVC, WebSocket, Validation, Spring Data JPA, Spring Data Redis, MySQL (`mysql-connector-j`), Lombok
 - Argon2id via BouncyCastle (`bcprov`, `Argon2BytesGenerator`) because the master key needs raw KDF bytes, which Spring Security's `Argon2PasswordEncoder` (encoded-hash output) does not give. Auth/session library (Spring Security, Spring Session) is not chosen yet.
 - Package layout is layered (by tier: controller / service / repository / entity, not by domain). Shared response/error types live in `global/response` (`ApiResponse`, `ErrorResponse`) and `global/exception` (`ErrorCode`, `BusinessException`, `GlobalExceptionHandler`); throw `BusinessException(ErrorCode.X)` from services. Other sub-package names are not fixed yet.
@@ -69,7 +75,8 @@ Security 2, Front-end 1, Back-end 3. Security designs the data-protection and ac
 ## Commands
 
 ```bash
-docker compose up -d                  # local MySQL + Redis
+docker compose up -d                  # local MySQL + Redis (from repo root)
+cd backend                            # Gradle commands below run in backend/
 ./gradlew bootRun                     # run app
 ./gradlew build                       # compile + test + jar
 ./gradlew test                        # all tests (JUnit 5)
