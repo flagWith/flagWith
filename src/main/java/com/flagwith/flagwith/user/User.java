@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @NoArgsConstructor
 public class User {
     @Id
@@ -25,7 +25,6 @@ public class User {
 
     @Column(nullable = false)
     private String username;
-
 
 
 }
