@@ -1,6 +1,7 @@
 package com.flagwith.flagwith.global.response
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ApiResponse<T>(
     val success: Boolean,
@@ -18,6 +19,7 @@ data class ApiResponse<T>(
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ErrorResponse(
     val success: Boolean = false,
+    @param:JsonProperty("error_code")
     val errorCode: String,
     val message: String,
     val errors: List<FieldError>? = null,
