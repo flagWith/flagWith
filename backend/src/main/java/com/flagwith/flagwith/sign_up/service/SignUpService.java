@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class SignUpService {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9_+&*-]+(?:\\.[A-Za-z0-9_+&*-]+)*@(?:[A-Za-z0-9-]+\\.)+[A-Za-z]{2,}$");
+
+    //8자 이상 128자 이하, 대/소문자  ·숫자·특수문자 포함
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[^A-Za-z0-9]).{8,128}$");
 
     private final SignUpRepository signUpRepository;
