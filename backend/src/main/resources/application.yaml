@@ -7,3 +7,9 @@ spring:
     url: ${DB_URL:jdbc:mysql://localhost:3306/flagwith}
     username: ${DB_USERNAME:flagwith}
     password: ${DB_PASSWORD:flagwith}
+server:
+  servlet:
+    session:
+      timeout: 3d
+      cookie:
+        name: SID

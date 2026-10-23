@@ -12,5 +12,7 @@ enum class ErrorCode(val status: HttpStatus, val message: String) {
     CONFLICTED_EMAIL(HttpStatus.CONFLICT, message = "이미 사용 중인 이메일입니다."),
     MISSING_FILED(HttpStatus.BAD_REQUEST, "모든 값을 작성해주십시오."),
     INVALID_EMAIL(HttpStatus.BAD_REQUEST, "이메일 형식이 올바르지 않습니다."),
-    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호 다시 확인해주세요.");
+    PASSWORD_MISMATCH(HttpStatus.BAD_REQUEST, "비밀번호 다시 확인해주세요."),
+    INVALID_FORMAT(HttpStatus.BAD_REQUEST, "이메일 또는 비밀번호가 틀렸습니다."),
+    LOGIN_RATE_LIMITED(HttpStatus.TOO_MANY_REQUESTS, "로그인 시도가 너무 많습니다. 15분 후 다시 시도해 주세요.")
 }
